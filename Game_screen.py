@@ -6,12 +6,28 @@ import time
 from tkinter import *
 from PIL import ImageTk
 
+################################
+# 추가해야 할 점 (메모)
+################################
+# 0. 두더지 나오는 게 의도와는 다르지만 일단 ok >> 이후에 변경할지 말지 고려
+# 1. 종료 버튼
+# 2. 재시작 버튼
+# 3. 점수 기록 (DB이용 시도)
+# 4. 설명 화면을 따로 만들지 고민중
+# 5. test 할 수 있는 기능 만들기...
+# 6. 다양한 기능 (아이템) 추가하기
+# 7. 시간 변경, 난이도 상승 등 추가하기
+# 8. 망치 or +- 점수 표시와 같은 이펙트 만들기
+# 9. 화면 비율 변경 가능하게 조정
+################################
 
 img_path = os.path.join(os.getcwd(), "image")
 
 class GameScreen :
 
     def __init__(self):
+        ###################################
+        # 필요한 함수들
         self.screen = Tk()
         self.screen.title("두더지 잡기 게임")
         self.screen.geometry("504x504")
@@ -21,23 +37,42 @@ class GameScreen :
         self.timer = 60
         self.start = 0
         self.button = 1
+        self.judge = 0
         self.timer_start =0
-        GameScreen.background = self.background()
-        start = self.intro()
-        content = self.contents()
-        btn1 = self.Button(50,250)
-        btn2 = self.Button(225, 250)
-        btn3 = self.Button(400, 250)
-        btn4 = self.Button(50, 325)
-        btn5 = self.Button(225, 325)
-        btn6 = self.Button(400, 325)
-        btn7 = self.Button(50, 400)
-        btn8 = self.Button(225, 400)
-        btn9 = self.Button(400, 400)
+        ###################################
+        # 작동 화면들
+        def GameStart():
+            GameScreen_background = self.background('background2.jpg')
+            start = self.intro()
+            content = self.contents()
+        #두더지들
+            btn1 = self.Button(50,250)
+            btn2 = self.Button(225, 250)
+            btn3 = self.Button(400, 250)
+            btn4 = self.Button(50, 325)
+            btn5 = self.Button(225, 325)
+            btn6 = self.Button(400, 325)
+            btn7 = self.Button(50, 400)
+            btn8 = self.Button(225, 400)
+            btn9 = self.Button(400, 400)
+        ###################################
+        # 본격적인 시작(첫화면)
+        Main_background = self.background('background1.png')
+        start_button = Button(self.screen, text = "시작", command = GameStart, width = 5, height = 2)
+        start_button.place(x=200, y=200)
+        exit1_button = Button(self.screen, text = "종료", command = self.screen.destroy, width = 5, height = 2)
+        exit1_button.place(x=260, y=200)
+        
+        ###################################
+
+
+        ###################################
+        
+        ###################################
         self.screen.mainloop()
 
-    def background(self):
-        final_path = os.path.join(img_path, 'Background.jpg')
+    def background(self,file):
+        final_path = os.path.join(img_path, file)
         background_image = ImageTk.PhotoImage(file=final_path)
         background_image_label = Label(self.screen)
         background_image_label.configure(image =background_image)
@@ -69,7 +104,10 @@ class GameScreen :
             if self.move in change:
                 self.score += 1
             else:
-                self.score -= 1
+                if self.judge in change:
+                    self.score += 1
+                else:
+                    self.score -= 1
             button.configure(image = dead_image)
 
         dead_path = os.path.join(img_path, 'dead.png')
@@ -88,7 +126,7 @@ class GameScreen :
                     button.configure(image = do_image)
                 else:
                     button.configure(image = dead_image)            
-                time.sleep(0.5)
+                time.sleep(0.1)
 
 
 
@@ -97,7 +135,9 @@ class GameScreen :
                 time.sleep(1)
             while self.timer > 0 :
                 self.move = random.randint(low,high)
-                time.sleep(1.5)
+                time.sleep(0.1)
+                self.judge = self.move
+                time.sleep(1.4)
 
 
         button_thread = threading.Thread(target=buttonthread)
@@ -142,8 +182,10 @@ class GameScreen :
         time_label.place(x=230,y=50)
         intro_label = Label(self.screen, text = '두더지 잡기 게임 게임설명\n시작 버튼을 누르면 제한시간 60초가 주어집니다\n튀어오른 두더지를 잡으면 1점이며\n들어간 두더지를 잡을시 -1점입니다.', background = 'orange', fg = 'white', font=("맑은 고딕", 10), height= 4)
         intro_label.place(x=110,y=100)
-        button = Button(self.screen, text = "시작", command = timer, width = 5, height = 2)
-        button.place(x=230, y=200)
+        timer_button = Button(self.screen, text = "시작", command = timer, width = 5, height = 2)
+        timer_button.place(x=200, y=200)
+        exit2_button = Button(self.screen, text = "종료", command = self.screen.destroy, width = 5, height = 2)
+        exit2_button.place(x=260, y=200)
         
 
 
