@@ -141,17 +141,24 @@ class GameScreen :
 
 
         button_thread = threading.Thread(target=buttonthread)
+        button_thread.daemon = True
         button_thread.start()
         percent_thread = threading.Thread(target=percent, args=(1, 100))
-        percent_thread.start()
-        
-            
+        percent_thread.daemon = True
+        percent_thread.start()    
 
     def contents(self):
-        title_label = Label(self.screen, text = '두더지 잡기 게임', background = 'purple', fg = 'yellow', font=("맑은 고딕", 10), height= 1)
-        title_label.place(x=5,y=5)
+        title_label = Label(self.screen,
+                            text='두더지 잡기 게임',
+                            background='purple', 
+                            fg='yellow',
+                            font=("맑은 고딕", 10),
+                            height=1)
+
+        title_label.place(x=5, y=5)
         score_label = Label(self.screen, text = f"점수 : {self.score} 점 입니다.", background = 'yellow', fg = 'purple', font=("맑은 고딕", 10), height= 1)
         score_label.place(x=300,y=5)
+        
         def scorethread():
             while self.start == 0:
                 time.sleep(1)
@@ -161,6 +168,7 @@ class GameScreen :
                 time.sleep(0.5)
 
         score_thread = threading.Thread(target=scorethread)
+        score_thread.daemon = True
         score_thread.start()
     
     def intro(self):
@@ -173,6 +181,7 @@ class GameScreen :
                         self.timer -= 1
                         time_label.configure(text = self.timer)
                 timer_thread = threading.Thread(target=timerthread)
+                timer_thread.daemon = True
                 timer_thread.start()
                 self.start = 1
                 self.timer_start = 1
@@ -187,7 +196,6 @@ class GameScreen :
         exit2_button = Button(self.screen, text = "종료", command = self.screen.destroy, width = 5, height = 2)
         exit2_button.place(x=260, y=200)
         
-
 
 
 
