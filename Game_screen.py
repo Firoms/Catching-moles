@@ -1,9 +1,11 @@
+import sys
 import os
 import random
 import threading
 import time
 
 from tkinter import *
+import tkinter.messagebox
 from PIL import ImageTk
 
 ################################
@@ -24,6 +26,11 @@ from PIL import ImageTk
 img_path = os.path.join(os.getcwd(), "image")
 
 
+def restart_program():
+    python = sys.executable
+    os.execl(python, python, * sys.argv)
+
+
 class GameScreen:
     def __init__(self):
         ###################################
@@ -41,6 +48,7 @@ class GameScreen:
         self.timer_start = 0
         ###################################
         # 작동 화면들
+
         def GameStart():
             GameScreen_background = self.background("background2.jpg")
             start = self.intro()
@@ -58,13 +66,20 @@ class GameScreen:
 
         ###################################
         # 본격적인 시작(첫화면)
+        Where = self.center_window(504, 504)
+        Make_menu = self.Game_menu()
+        self.screen.iconbitmap('do_icon.ico')
         Main_background = self.background("background1.png")
-        start_button = Button(self.screen, text="시작", command=GameStart, width=5, height=2)
-        start_button.place(x=200, y=200)
-        exit1_button = Button(
-            self.screen, text="종료", command=self.screen.destroy, width=5, height=2
-        )
-        exit1_button.place(x=260, y=200)
+        self.start_img_path = os.path.join(img_path, "start.png")
+        self.exit_img_path = os.path.join(img_path, "exit.png")
+        self.start_image = ImageTk.PhotoImage(file=self.start_img_path)
+        self.exit_image = ImageTk.PhotoImage(file=self.exit_img_path)
+        start_button = Button(self.screen, command=GameStart)
+        start_button.configure(image=self.start_image)
+        start_button.place(x=180, y=200)
+        exit_button = Button(self.screen, command=self.screen.destroy)
+        exit_button.configure(image=self.exit_image)
+        exit_button.place(x=270, y=200)
 
         ###################################
 
@@ -72,6 +87,37 @@ class GameScreen:
 
         ###################################
         self.screen.mainloop()
+
+    def center_window(self, width, height):
+        screen_width = self.screen.winfo_screenwidth()
+        screen_height = self.screen.winfo_screenheight()
+
+        x = (screen_width/2) - (width/2)
+        y = (screen_height/2) - (height/2)
+
+        self.screen.geometry('%dx%d+%d+%d' % (width, height, x, y))
+
+    def Game_menu(self):
+        def _quit():
+            self.screen.quit()
+            self.screen.destroy()
+            exit()
+
+        def _msgBox():
+            tkinter.messagebox.showinfo(
+                'About', 'Firoms가 처음 만드는 Gui 게임\n두더지잡기 게임인데 아직 조금 미숙함\n재밌게 플레이 하세요')
+
+        menu_bar = Menu(self.screen)
+        self.screen.config(menu=menu_bar)
+        file_menu = Menu(menu_bar, tearoff=0)
+        file_menu.add_command(label="New Game", command=restart_program)
+        file_menu.add_separator()
+        file_menu.add_command(label="Exit", command=_quit)
+        menu_bar.add_cascade(label="File", menu=file_menu)
+
+        help_menu = Menu(menu_bar, tearoff=0)
+        menu_bar.add_cascade(label="Help", menu=help_menu)
+        help_menu.add_command(label="About", command=_msgBox)
 
     def background(self, file):
         final_path = os.path.join(img_path, file)
@@ -216,12 +262,15 @@ class GameScreen:
             height=4,
         )
         intro_label.place(x=110, y=100)
-        timer_button = Button(self.screen, text="시작", command=timer, width=5, height=2)
-        timer_button.place(x=200, y=200)
+        timer_button = Button(self.screen,
+                              command=timer)
+        timer_button.configure(image=self.start_image)
+        timer_button.place(x=180, y=200)
         exit2_button = Button(
-            self.screen, text="종료", command=self.screen.destroy, width=5, height=2
+            self.screen, command=self.screen.destroy
         )
-        exit2_button.place(x=260, y=200)
+        exit2_button.configure(image=self.exit_image)
+        exit2_button.place(x=270, y=200)
 
 
 test = GameScreen()
