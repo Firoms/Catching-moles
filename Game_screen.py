@@ -3,17 +3,17 @@ import os
 import random
 import threading
 import time
-
-from tkinter import *
+import sqlite3 as sq
 import tkinter.messagebox
+from tkinter import *
 from PIL import ImageTk
 
 ################################
 # 추가해야 할 점 (메모)
 ################################
 # 0. 두더지 나오는 게 의도와는 다르지만 일단 ok >> 이후에 변경할지 말지 고려
-# 1. 종료 버튼
-# 2. 재시작 버튼
+# 1. 종료 버튼 O
+# 2. 재시작 버튼 O
 # 3. 점수 기록 (DB이용 시도)
 # 4. 설명 화면을 따로 만들지 고민중
 # 5. test 할 수 있는 기능 만들기...
@@ -129,23 +129,8 @@ class GameScreen:
 
     def Button(self, x, y):
         change = []
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
-        change.append(random.randint(0, 100))
+        for i in range(14):
+            change.append(random.randint(0, 100))
 
         def Button_clicked():
             if self.move in change:
@@ -271,6 +256,10 @@ class GameScreen:
         )
         exit2_button.configure(image=self.exit_image)
         exit2_button.place(x=270, y=200)
+
+    def DB(self):
+        conn = sq.connect("ScoreBoard.db")
+        cur = conn.cursor()
 
 
 test = GameScreen()
