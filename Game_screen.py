@@ -1,12 +1,15 @@
+from PIL import ImageTk
+from tkinter import *
+from tkinter import ttk
+from tkinter import messagebox
 import sys
 import os
 import random
 import threading
 import time
-import sqlite3 as sq
+import sqlite3
 import tkinter.messagebox
-from tkinter import *
-from PIL import ImageTk
+import time
 
 ################################
 # 추가해야 할 점 (메모)
@@ -46,6 +49,9 @@ class GameScreen:
         self.button = 1
         self.judge = 0
         self.timer_start = 0
+        self.date = time.strftime('%Y/%m/%d')
+        self.time = time.strftime('%H.%M.%S')
+        self.name = 'test'
         ###################################
         # 작동 화면들
 
@@ -211,6 +217,7 @@ class GameScreen:
                 )
                 score_label.place(x=300, y=5)
                 time.sleep(0.5)
+            Save = self.DB()
 
         score_thread = threading.Thread(target=scorethread)
         score_thread.daemon = True
@@ -218,6 +225,8 @@ class GameScreen:
 
     def intro(self):
         def timer():
+            self.name = name.get()
+            name_entered.configure(state='disabled')
             if self.timer_start == 0:
 
                 def timerthread():
@@ -247,19 +256,28 @@ class GameScreen:
             height=4,
         )
         intro_label.place(x=110, y=100)
+        name = tkinter.StringVar()
+        name_entered = ttk.Entry(
+            self.screen, textvariable=name)
+        name_entered.place(x=130, y=200, height=40, width=60)
         timer_button = Button(self.screen,
                               command=timer)
         timer_button.configure(image=self.start_image)
-        timer_button.place(x=180, y=200)
+        timer_button.place(x=220, y=200)
         exit2_button = Button(
             self.screen, command=self.screen.destroy
         )
         exit2_button.configure(image=self.exit_image)
-        exit2_button.place(x=270, y=200)
+        exit2_button.place(x=310, y=200)
 
     def DB(self):
-        conn = sq.connect("ScoreBoard.db")
-        cur = conn.cursor()
+        db = sqlite3.connect("score.db")
+        cursor = db.cursor()
+        insert_query = \
+            f"INSERT INTO Score_table VALUES('{self.date}', '{self.time}', '{self.name}', '{self.score}')"
+        cursor.execute(insert_query)
+        db.commit()
+        db.close()
 
 
 test = GameScreen()

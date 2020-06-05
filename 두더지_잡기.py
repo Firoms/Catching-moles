@@ -1,6 +1,5 @@
-from Game_screen import GameScreen
-
+from datetime import datetime
 
 
 if __name__ == 'main':
-    test = GameScreen()
+    print(datetime.today().strftime("%Y%m%d%H%M%S"))
