@@ -49,69 +49,82 @@ class GameScreen:
         self.button = 1
         self.judge = 0
         self.timer_start = 0
+        self.stop = 0
+        self.score_on = 0
         self.date = time.strftime('%Y/%m/%d')
         self.time = time.strftime('%H.%M.%S')
         self.name = 'test'
+        self.screen.iconbitmap('do_icon.ico')
         self.db = sqlite3.connect("score.db", check_same_thread=False)
         self.cursor = self.db.cursor()
-        ###################################
-        # 작동 화면들
-
-        def GameStart():
-            GameScreen_background = self.background("background2.jpg")
-            start = self.intro()
-            content = self.contents()
-            # 두더지들
-            btn1 = self.Button(50, 250)
-            btn2 = self.Button(225, 250)
-            btn3 = self.Button(400, 250)
-            btn4 = self.Button(50, 325)
-            btn5 = self.Button(225, 325)
-            btn6 = self.Button(400, 325)
-            btn7 = self.Button(50, 400)
-            btn8 = self.Button(225, 400)
-            btn9 = self.Button(400, 400)
-
-        def jump():
-            score = self.Scoreboard()
-
-        def Main():
-            Where = self.center_window(504, 504)
-            Make_menu = self.Game_menu()
-            self.screen.iconbitmap('do_icon.ico')
-            Main_background = self.background("background1.png")
-            self.start_img_path = os.path.join(img_path, "start.png")
-            self.exit_img_path = os.path.join(img_path, "exit.png")
-            self.score_img_path = os.path.join(img_path, "score_btn.png")
-            self.start_image = ImageTk.PhotoImage(file=self.start_img_path)
-            self.exit_image = ImageTk.PhotoImage(file=self.exit_img_path)
-            self.score_image = ImageTk.PhotoImage(file=self.score_img_path)
-            start_button = Button(self.screen, command=GameStart)
-            start_button.configure(image=self.start_image)
-            start_button.place(x=150, y=200)
-            score_button = Button(self.screen, command=jump)
-            score_button.configure(image=self.score_image)
-            score_button.place(x=225, y=200)
-            exit_button = Button(self.screen, command=self.screen.destroy)
-            exit_button.configure(image=self.exit_image)
-            exit_button.place(x=300, y=200)
-
-        ###################################
-
-        ###################################
-
-        ###################################
-        Main()
+        Start = self.Main()
         self.screen.mainloop()
+
+    def GameStart(self):
+        GameScreen_background = self.background("background2.jpg")
+        start = self.intro()
+        self.back_img_path = os.path.join(img_path, "back.png")
+        self.back_image = ImageTk.PhotoImage(file=self.back_img_path)
+        back_button = Button(self.screen, command=self.Main)
+        back_button.configure(image=self.back_image)
+        back_button.place(x=430, y=10)
+        content = self.contents()
+        # 두더지들
+        btn1 = self.Button(50, 250)
+        btn2 = self.Button(225, 250)
+        btn3 = self.Button(400, 250)
+        btn4 = self.Button(50, 325)
+        btn5 = self.Button(225, 325)
+        btn6 = self.Button(400, 325)
+        btn7 = self.Button(50, 400)
+        btn8 = self.Button(225, 400)
+        btn9 = self.Button(400, 400)
+
+    def Main(self):
+        self.stop = 1
+        self.timer = 60
+        self.score_on = 0
+        self.timer_start = 0
+        self.score = 0
+        Where = self.center_window(504, 512)
+        Make_menu = self.Game_menu()
+        Main_background = self.background("background1.png")
+        self.start_img_path = os.path.join(img_path, "start.png")
+        self.exit_img_path = os.path.join(img_path, "exit.png")
+        self.score_img_path = os.path.join(img_path, "score_btn.png")
+        self.start_image = ImageTk.PhotoImage(file=self.start_img_path)
+        self.exit_image = ImageTk.PhotoImage(file=self.exit_img_path)
+        self.score_image = ImageTk.PhotoImage(file=self.score_img_path)
+        start_button = Button(self.screen, command=self.GameStart)
+        start_button.configure(image=self.start_image)
+        start_button.place(x=150, y=200)
+        score_button = Button(self.screen, command=self.Scoreboard)
+        score_button.configure(image=self.score_image)
+        score_button.place(x=225, y=200)
+        exit_button = Button(self.screen, command=self.screen.destroy)
+        exit_button.configure(image=self.exit_image)
+        exit_button.place(x=300, y=200)
+
+        ###################################
+
+        ###################################
+
+        ###################################
 
     def DB(self):
         insert_query = \
-            f"INSERT INTO Score_table VALUES('{self.date}', '{self.time}', '{self.name}', '{self.score}')"
+            f"INSERT OR REPLACE INTO Score_table VALUES('{self.date}', '{self.time}', '{self.name}', '{self.score}')"
         self.cursor.execute(insert_query)
         self.db.commit()
 
     def Scoreboard(self):
         Score_background = self.background("background3.png")
+        self.back_img_path = os.path.join(img_path, "back.png")
+        self.back_image = ImageTk.PhotoImage(file=self.back_img_path)
+        back_button = Button(self.screen, command=self.Main)
+        back_button.configure(image=self.back_image)
+        back_button.place(x=430, y=10)
+
         if self.timer == 0:
             Save = self.DB()
         self.cursor.execute(
@@ -119,11 +132,32 @@ class GameScreen:
         score_title_label = Label(
             self.screen, text="점수판", background="green", fg="red", font=("맑은 고딕", 20), height=1)
         score_title_label.place(x=10, y=10)
+        rank_label = Label(
+            self.screen, text="등수", background="yellow", fg="red", font=("맑은 고딕", 12), height=1)
+        rank_label.place(x=10, y=60)
+        Date_label = Label(
+            self.screen, text="날짜", background="yellow", fg="red", font=("맑은 고딕", 12), height=1)
+        Date_label.place(x=100, y=60)
+        NickName_label = Label(
+            self.screen, text="닉네임", background="yellow", fg="red", font=("맑은 고딕", 12), height=1)
+        NickName_label.place(x=250, y=60)
+        Score_label = Label(
+            self.screen, text="점수", background="yellow", fg="red", font=("맑은 고딕", 12), height=1)
+        Score_label.place(x=400, y=60)
         for i in range(1, 11):
             rank_label = Label(
-                self.screen, text=f"{i}등 : {self.cursor.fetchone()}점", background="green", fg="red", font=("맑은 고딕", 12), height=1)
-            rank_label.place(x=10, y=(i*40)+40)
-        # db.close()
+                self.screen, text=f"{i}등", background="green", fg="red", font=("맑은 고딕", 12), height=1)
+            rank_label.place(x=10, y=(i*40)+60)
+            score_list = self.cursor.fetchone()
+            Date_label = Label(
+                self.screen, text=score_list[0], background="green", fg="red", font=("맑은 고딕", 12), height=1)
+            Date_label.place(x=100, y=(i*40)+60)
+            NickName_label = Label(
+                self.screen, text=score_list[2], background="green", fg="red", font=("맑은 고딕", 12), height=1)
+            NickName_label.place(x=250, y=(i*40)+60)
+            Score_label = Label(
+                self.screen, text=score_list[3], background="green", fg="red", font=("맑은 고딕", 12), height=1)
+            Score_label.place(x=400, y=(i*40)+60)
 
     def center_window(self, width, height):
         screen_width = self.screen.winfo_screenwidth()
@@ -155,6 +189,8 @@ class GameScreen:
         help_menu = Menu(menu_bar, tearoff=0)
         menu_bar.add_cascade(label="Help", menu=help_menu)
         help_menu.add_command(label="About", command=_msgBox)
+        help_menu.add_separator()
+        help_menu.add_command(label="ScoreBoard", command=self.Scoreboard)
 
     def background(self, file):
         final_path = os.path.join(img_path, file)
@@ -170,14 +206,16 @@ class GameScreen:
             change.append(random.randint(0, 100))
 
         def Button_clicked():
-            if self.move in change:
-                self.score += 1
-            else:
-                if self.judge in change:
-                    self.score += 1
-                else:
-                    self.score -= 1
-            button.configure(image=dead_image)
+            if self.stop == 0:
+                if self.timer > 0:
+                    if self.move in change:
+                        self.score += 1
+                    else:
+                        if self.judge in change:
+                            self.score += 1
+                        else:
+                            self.score -= 1
+                    button.configure(image=dead_image)
 
         dead_path = os.path.join(img_path, "dead.png")
         do_path = os.path.join(img_path, "do.jpg")
@@ -248,31 +286,37 @@ class GameScreen:
                 )
                 score_label.place(x=300, y=5)
                 time.sleep(0.5)
-            Score_board = self.Scoreboard()
+                if self.score_on == 0:
+                    break
+
+            if self.stop == 0:
+                Score_board = self.Scoreboard()
 
         score_thread = threading.Thread(target=scorethread)
         score_thread.daemon = True
         score_thread.start()
 
     def intro(self):
+        self.score_on = 1
+
         def timer():
+            self.stop = 0
             self.name = name.get()
             name_entered.configure(state='disabled')
-            if self.timer_start == 0:
+            self.timer_start = 1
 
-                def timerthread():
-                    while self.timer > 0:
-                        time.sleep(1)
-                        self.timer -= 1
-                        time_label.configure(text=self.timer)
+            def timerthread():
+                while self.timer > 0:
+                    time.sleep(1)
+                    self.timer -= 1
+                    time_label.configure(text=self.timer)
+                    if self.stop == 1:
+                        break
 
-                timer_thread = threading.Thread(target=timerthread)
-                timer_thread.daemon = True
-                timer_thread.start()
-                self.start = 1
-                self.timer_start = 1
-            else:
-                pass
+            timer_thread = threading.Thread(target=timerthread)
+            timer_thread.daemon = True
+            timer_thread.start()
+            self.start = 1
 
         time_label = Label(
             self.screen, text="60", background="green", fg="red", font=("맑은 고딕", 20), height=1
