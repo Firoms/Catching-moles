@@ -55,6 +55,7 @@ class GameScreen:
         self.time = time.strftime('%H.%M.%S')
         self.name = 'test'
         self.screen.iconbitmap('do_icon.ico')
+        self.screen.config(cursor="spraycan")
         self.db = sqlite3.connect("score.db", check_same_thread=False)
         self.cursor = self.db.cursor()
         Start = self.Main()
