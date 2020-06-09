@@ -2,6 +2,7 @@ from PIL import ImageTk
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+from playsound import playsound
 import sys
 import os
 import random
@@ -39,6 +40,7 @@ class GameScreen:
         ###################################
         # 필요한 함수들
         self.screen = Tk()
+        self.screen.iconbitmap('do_icon.ico')
         self.screen.title("두더지 잡기 게임")
         self.screen.geometry("504x504")
         self.screen.resizable(width=False, height=False)
@@ -54,10 +56,22 @@ class GameScreen:
         self.date = time.strftime('%Y/%m/%d')
         self.time = time.strftime('%H.%M.%S')
         self.name = 'test'
-        self.screen.iconbitmap('do_icon.ico')
         self.screen.config(cursor="spraycan")
         self.db = sqlite3.connect("score.db", check_same_thread=False)
         self.cursor = self.db.cursor()
+
+        def songthread():
+            while True:
+                playsound('song.wav')
+                time.sleep(1)
+        song_thread = threading.Thread(target=songthread)
+        song_thread.daemon = True
+        song_thread.start()
+        # 클릭할때 소리나게 하면 약간의 랙이 있는 듯함
+        # def click(self):
+        # playsound('click.wav')
+        # self.screen.bind('<Button-1>', click)
+
         Start = self.Main()
         self.screen.mainloop()
 
