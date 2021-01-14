@@ -6,19 +6,15 @@ exe 파일 실행시 사진 및 음악파일의 경로를 알맞게 위치시켜
 
 
 1. 사용 라이브러리
-- from PIL import ImageTk
-- from tkinter import *
-- from tkinter import ttk
-- from tkinter import messagebox
-- from playsound import playsound
-- import sys
-- import os
-- import random
-- import threading
-- import time
-- import sqlite3
-- import tkinter.messagebox
-- import time
+- pillow
+- tkinter
+- playsound
+- sys
+- os
+- random
+- threading
+- time
+- sqlite3
 
 Pyinstaller - .py 를 exe 파일로 바꿀때 CMD에서 사용
 
