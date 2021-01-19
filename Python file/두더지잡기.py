@@ -10,7 +10,6 @@ import threading
 import time
 import sqlite3
 import tkinter.messagebox
-import time
 
 ################################
 # 추가해야 할 점 (메모)
@@ -27,7 +26,7 @@ import time
 # 9. 화면 비율 변경 가능하게 조정
 ################################
 
-img_path = os.path.join(os.getcwd(), "image")
+img_path = os.path.join(os.getcwd())
 
 
 def restart_program():
@@ -40,7 +39,7 @@ class GameScreen:
         ###################################
         # 필요한 함수들
         self.screen = Tk()
-        self.screen.iconbitmap('image/do_icon.ico')
+        self.screen.iconbitmap('../../Images/do_icon.ico')
         self.screen.title("두더지 잡기 게임")
         self.screen.geometry("504x504")
         self.screen.resizable(width=False, height=False)
@@ -57,12 +56,12 @@ class GameScreen:
         self.time = time.strftime('%H.%M.%S')
         self.name = 'test'
         self.screen.config(cursor="spraycan")
-        self.db = sqlite3.connect("database/score.db", check_same_thread=False)
+        self.db = sqlite3.connect("../../database/score.db", check_same_thread=False)
         self.cursor = self.db.cursor()
 
         def songthread():
             while True:
-                playsound('music/song.wav')
+                playsound('../../Music/song.wav')
                 time.sleep(1)
         song_thread = threading.Thread(target=songthread)
         song_thread.daemon = True
@@ -76,9 +75,9 @@ class GameScreen:
         self.screen.mainloop()
 
     def GameStart(self):
-        GameScreen_background = self.background("background2.jpg")
+        GameScreen_background = self.background("../../images/background2.jpg")
         start = self.intro()
-        self.back_img_path = os.path.join(img_path, "back.png")
+        self.back_img_path = os.path.join(img_path, "../../images/back.png")
         self.back_image = ImageTk.PhotoImage(file=self.back_img_path)
         back_button = Button(self.screen, command=self.Main)
         back_button.configure(image=self.back_image)
@@ -103,10 +102,10 @@ class GameScreen:
         self.score = 0
         Where = self.center_window(504, 512)
         Make_menu = self.Game_menu()
-        Main_background = self.background("background1.png")
-        self.start_img_path = os.path.join(img_path, "start.png")
-        self.exit_img_path = os.path.join(img_path, "exit.png")
-        self.score_img_path = os.path.join(img_path, "score_btn.png")
+        Main_background = self.background("../../images/background1.png")
+        self.start_img_path = os.path.join(img_path, "../../images/start.png")
+        self.exit_img_path = os.path.join(img_path, "../../images/exit.png")
+        self.score_img_path = os.path.join(img_path, "../../images/score_btn.png")
         self.start_image = ImageTk.PhotoImage(file=self.start_img_path)
         self.exit_image = ImageTk.PhotoImage(file=self.exit_img_path)
         self.score_image = ImageTk.PhotoImage(file=self.score_img_path)
@@ -128,13 +127,13 @@ class GameScreen:
 
     def DB(self):
         insert_query = \
-            f"INSERT OR REPLACE INTO Score_table VALUES('{self.date}', '{self.time}', '{self.name}', '{self.score}')"
+            f"INSERT INTO Score_table VALUES('{self.date}', '{self.time}', '{self.name}', '{self.score}')"
         self.cursor.execute(insert_query)
         self.db.commit()
 
     def Scoreboard(self):
-        Score_background = self.background("background3.png")
-        self.back_img_path = os.path.join(img_path, "back.png")
+        Score_background = self.background("../../images/background3.png")
+        self.back_img_path = os.path.join(img_path, "../../images/back.png")
         self.back_image = ImageTk.PhotoImage(file=self.back_img_path)
         back_button = Button(self.screen, command=self.Main)
         back_button.configure(image=self.back_image)
@@ -191,7 +190,7 @@ class GameScreen:
 
         def _msgBox():
             tkinter.messagebox.showinfo(
-                'About', 'Firoms가 처음 만드는 Gui 게임\n두더지잡기 게임인데 아직 조금 미숙함\n재밌게 플레이 하세요')
+                'About', 'Firoms가 처음 만드는 Gui 게임\n두더지잡기 게임인데 아직 부족하지만\n재밌게 플레이 해주세요')
 
         menu_bar = Menu(self.screen)
         self.screen.config(menu=menu_bar)
@@ -232,8 +231,8 @@ class GameScreen:
                             self.score -= 1
                     button.configure(image=dead_image)
 
-        dead_path = os.path.join(img_path, "dead.png")
-        do_path = os.path.join(img_path, "do.jpg")
+        dead_path = os.path.join(img_path, "../../images/dead.png")
+        do_path = os.path.join(img_path, "../../images/do.jpg")
         do_image = ImageTk.PhotoImage(file=do_path)
         dead_image = ImageTk.PhotoImage(file=dead_path)
         button = Button(self.screen, command=Button_clicked)
