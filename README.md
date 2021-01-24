@@ -67,3 +67,14 @@ exe 파일 실행시 사진 및 음악파일의 경로를 알맞게 위치시켜
     두더지 잡기 게임 프로젝트는 저에게 자신감을 가져다 주었고,   
     새로운 GUI 프로젝트에 도전하는 동기부여를 가져다 준 프로젝트여서   
     고생도 하고 힘들었지만 정말 기억에 남습니다.   
+   ***
+## 실행사진
+<center>
+      <img src="https://user-images.githubusercontent.com/63716450/105629273-5f738680-5e85-11eb-9878-c93fd13d9c17.PNG"  width="500" height="500">
+</center>
+<center>
+      <img src="https://user-images.githubusercontent.com/63716450/105629276-613d4a00-5e85-11eb-94f8-98a4df94c447.PNG"  width="500" height="500">
+</center>
+<center>
+      <img src="https://user-images.githubusercontent.com/63716450/105629277-613d4a00-5e85-11eb-80b0-ea40b33c09fb.PNG"  width="500" height="500">
+</center>

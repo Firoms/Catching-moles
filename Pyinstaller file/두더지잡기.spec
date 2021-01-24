@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['두더지잡기.py'],
-             pathex=['C:\\코딩\\GUI_두더지잡기\\Python file'],
+             pathex=['C:\\코딩\\GUI_두더지잡기\\Python file\\1'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -30,4 +30,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False , icon='..\\Images\\do_icon.ico')
+          console=False , icon='..\\..\\images\\do_icon.ico')
