@@ -31,7 +31,7 @@ img_path = os.path.join(os.getcwd())
 
 def restart_program():
     python = sys.executable
-    os.execl(python, python, * sys.argv)
+    os.execl(python, python, *sys.argv)
 
 
 class GameScreen:
@@ -39,7 +39,7 @@ class GameScreen:
         ###################################
         # 필요한 함수들
         self.screen = Tk()
-        self.screen.iconbitmap('../../Images/do_icon.ico')
+        self.screen.iconbitmap("../../Images/do_icon.ico")
         self.screen.title("두더지 잡기 게임")
         self.screen.geometry("504x504")
         self.screen.resizable(width=False, height=False)
@@ -52,17 +52,18 @@ class GameScreen:
         self.timer_start = 0
         self.stop = 0
         self.score_on = 0
-        self.date = time.strftime('%Y/%m/%d')
-        self.time = time.strftime('%H.%M.%S')
-        self.name = 'test'
+        self.date = time.strftime("%Y/%m/%d")
+        self.time = time.strftime("%H.%M.%S")
+        self.name = "test"
         self.screen.config(cursor="spraycan")
         self.db = sqlite3.connect("../../database/score.db", check_same_thread=False)
         self.cursor = self.db.cursor()
 
         def songthread():
             while True:
-                playsound('../../Music/song.wav')
+                playsound("../../Music/song.wav")
                 time.sleep(1)
+
         song_thread = threading.Thread(target=songthread)
         song_thread.daemon = True
         song_thread.start()
@@ -126,8 +127,7 @@ class GameScreen:
         ###################################
 
     def DB(self):
-        insert_query = \
-            f"INSERT INTO Score_table VALUES('{self.date}', '{self.time}', '{self.name}', '{self.score}')"
+        insert_query = f"INSERT INTO Score_table VALUES('{self.date}', '{self.time}', '{self.name}', '{self.score}')"
         self.cursor.execute(insert_query)
         self.db.commit()
 
@@ -141,46 +141,99 @@ class GameScreen:
 
         if self.timer == 0:
             Save = self.DB()
-        self.cursor.execute(
-            "SELECT * FROM Score_table ORDER BY Score DESC")
+        self.cursor.execute("SELECT * FROM Score_table ORDER BY Score DESC")
         score_title_label = Label(
-            self.screen, text="점수판", background="green", fg="red", font=("맑은 고딕", 20), height=1)
+            self.screen,
+            text="점수판",
+            background="green",
+            fg="red",
+            font=("맑은 고딕", 20),
+            height=1,
+        )
         score_title_label.place(x=10, y=10)
         rank_label = Label(
-            self.screen, text="등수", background="yellow", fg="red", font=("맑은 고딕", 12), height=1)
+            self.screen,
+            text="등수",
+            background="yellow",
+            fg="red",
+            font=("맑은 고딕", 12),
+            height=1,
+        )
         rank_label.place(x=10, y=60)
         Date_label = Label(
-            self.screen, text="날짜", background="yellow", fg="red", font=("맑은 고딕", 12), height=1)
+            self.screen,
+            text="날짜",
+            background="yellow",
+            fg="red",
+            font=("맑은 고딕", 12),
+            height=1,
+        )
         Date_label.place(x=100, y=60)
         NickName_label = Label(
-            self.screen, text="닉네임", background="yellow", fg="red", font=("맑은 고딕", 12), height=1)
+            self.screen,
+            text="닉네임",
+            background="yellow",
+            fg="red",
+            font=("맑은 고딕", 12),
+            height=1,
+        )
         NickName_label.place(x=250, y=60)
         Score_label = Label(
-            self.screen, text="점수", background="yellow", fg="red", font=("맑은 고딕", 12), height=1)
+            self.screen,
+            text="점수",
+            background="yellow",
+            fg="red",
+            font=("맑은 고딕", 12),
+            height=1,
+        )
         Score_label.place(x=400, y=60)
         for i in range(1, 11):
             rank_label = Label(
-                self.screen, text=f"{i}등", background="green", fg="red", font=("맑은 고딕", 12), height=1)
-            rank_label.place(x=10, y=(i*40)+60)
+                self.screen,
+                text=f"{i}등",
+                background="green",
+                fg="red",
+                font=("맑은 고딕", 12),
+                height=1,
+            )
+            rank_label.place(x=10, y=(i * 40) + 60)
             score_list = self.cursor.fetchone()
             Date_label = Label(
-                self.screen, text=score_list[0], background="green", fg="red", font=("맑은 고딕", 12), height=1)
-            Date_label.place(x=100, y=(i*40)+60)
+                self.screen,
+                text=score_list[0],
+                background="green",
+                fg="red",
+                font=("맑은 고딕", 12),
+                height=1,
+            )
+            Date_label.place(x=100, y=(i * 40) + 60)
             NickName_label = Label(
-                self.screen, text=score_list[2], background="green", fg="red", font=("맑은 고딕", 12), height=1)
-            NickName_label.place(x=250, y=(i*40)+60)
+                self.screen,
+                text=score_list[2],
+                background="green",
+                fg="red",
+                font=("맑은 고딕", 12),
+                height=1,
+            )
+            NickName_label.place(x=250, y=(i * 40) + 60)
             Score_label = Label(
-                self.screen, text=score_list[3], background="green", fg="red", font=("맑은 고딕", 12), height=1)
-            Score_label.place(x=400, y=(i*40)+60)
+                self.screen,
+                text=score_list[3],
+                background="green",
+                fg="red",
+                font=("맑은 고딕", 12),
+                height=1,
+            )
+            Score_label.place(x=400, y=(i * 40) + 60)
 
     def center_window(self, width, height):
         screen_width = self.screen.winfo_screenwidth()
         screen_height = self.screen.winfo_screenheight()
 
-        x = (screen_width/2) - (width/2)
-        y = (screen_height/2) - (height/2)
+        x = (screen_width / 2) - (width / 2)
+        y = (screen_height / 2) - (height / 2)
 
-        self.screen.geometry('%dx%d+%d+%d' % (width, height, x, y))
+        self.screen.geometry("%dx%d+%d+%d" % (width, height, x, y))
 
     def Game_menu(self):
         def _quit():
@@ -190,7 +243,8 @@ class GameScreen:
 
         def _msgBox():
             tkinter.messagebox.showinfo(
-                'About', 'Firoms가 처음 만드는 Gui 게임\n두더지잡기 게임인데 아직 부족하지만\n재밌게 플레이 해주세요')
+                "About", "Firoms가 처음 만드는 Gui 게임\n두더지잡기 게임인데 아직 부족하지만\n재밌게 플레이 해주세요"
+            )
 
         menu_bar = Menu(self.screen)
         self.screen.config(menu=menu_bar)
@@ -316,7 +370,7 @@ class GameScreen:
         def timer():
             self.stop = 0
             self.name = name.get()
-            name_entered.configure(state='disabled')
+            name_entered.configure(state="disabled")
             self.timer_start = 1
 
             def timerthread():
@@ -333,7 +387,12 @@ class GameScreen:
             self.start = 1
 
         time_label = Label(
-            self.screen, text="60", background="green", fg="red", font=("맑은 고딕", 20), height=1
+            self.screen,
+            text="60",
+            background="green",
+            fg="red",
+            font=("맑은 고딕", 20),
+            height=1,
         )
         time_label.place(x=230, y=50)
         intro_label = Label(
@@ -347,16 +406,12 @@ class GameScreen:
         intro_label.place(x=110, y=100)
         ttk.Label(self.screen, text="닉네임 입력 : ").place(x=110, y=200)
         name = tkinter.StringVar()
-        name_entered = ttk.Entry(
-            self.screen, textvariable=name)
+        name_entered = ttk.Entry(self.screen, textvariable=name)
         name_entered.place(x=110, y=220, height=20, width=80)
-        timer_button = Button(self.screen,
-                              command=timer)
+        timer_button = Button(self.screen, command=timer)
         timer_button.configure(image=self.start_image)
         timer_button.place(x=220, y=200)
-        exit2_button = Button(
-            self.screen, command=self.screen.destroy
-        )
+        exit2_button = Button(self.screen, command=self.screen.destroy)
         exit2_button.configure(image=self.exit_image)
         exit2_button.place(x=330, y=200)
 
